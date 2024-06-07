@@ -88,7 +88,7 @@ done
 genome="hg38"
 geneCount="23,235 genes"
 refFile='hg38_PCgenes_TSS-TTS.bed'
-
+shortRefFile='hg38_PCgenes_TSS-TTS'
 start="${genome}-TSS"
 body="${genome}-GENE"
 body_start="TSS"
@@ -98,25 +98,26 @@ body_end="TTS"
 if [ "$custom_input" != "" ]
 then
     refFile="$custom_input"
+    shortRefFile="${custom_input%.bed}"
     lines=$(wc -l $custom_input | cut -f1 -d' ')
     geneCount="$lines regions"
-    start="${custom_input%.bed}-RegionStartSite"
+    start="RegionStartSite"
     body="${custom_input%.bed}-Region"
     body_start="Region Start"
     body_end="Region End"
 fi
 
-
+mkdir $shortRefFile
 #making TSS and Gene heatmaps or just one?
 if [ "$region" = "start_site" ] || [ "$region" = "both" ];
 then
 ## TSS +/2kb, bin 20bp, sort by row mean ###
 echo ''
 echo "computeMatrix: $start as Reference Point"
-computeMatrix  reference-point  --regionsFileName $refFile  --scoreFileName $bigwigInput --outFileName ${outputFile}-$start.matrix.gz --referencePoint TSS  --beforeRegionStartLength 2000  --afterRegionStartLength 2000  --binSize 20  --sortRegions keep  --sortUsing mean --averageTypeBins mean  --missingDataAsZero  --scale 1  --numberOfProcessors 1 --samplesLabel $labels
+computeMatrix  reference-point  --regionsFileName $refFile  --scoreFileName $bigwigInput --outFileName $shortRefFile/${outputFile}-$start.matrix.gz --referencePoint TSS  --beforeRegionStartLength 2000  --afterRegionStartLength 2000  --binSize 20  --sortRegions keep  --sortUsing mean --averageTypeBins mean  --missingDataAsZero  --scale 1  --numberOfProcessors 1 --samplesLabel $labels
 
 echo "plotHeatmap: $start as Reference Point"
-plotHeatmap  --matrixFile ${outputFile}-$start.matrix.gz  --outFileName ${outputFile}.$start.sortSample${sortSample}.heatmap.png --sortUsingSamples $sortSample --interpolationMethod  auto  --dpi 150 --averageTypeSummaryPlot mean  --colorList "#306FBA,#FCEC92,#E93323"   --missingDataColor "blue"  --alpha 1.0  --colorNumber 256  --heatmapHeight 20  --heatmapWidth 10  --whatToShow "plot, heatmap and colorbar"  --boxAroundHeatmaps "yes"  --refPointLabel "$body_start"  --labelRotation 0  --regionsLabel "$geneCount" --yAxisLabel "Mean signal (RPKM)"  --legendLocation "best"  --zMax auto --xAxisLabel ""
+plotHeatmap  --matrixFile $shortRefFile/${outputFile}-$start.matrix.gz  --outFileName $shortRefFile/${outputFile}.$start.sortSample${sortSample}.heatmap.png --sortUsingSamples $sortSample --interpolationMethod  auto  --dpi 150 --averageTypeSummaryPlot mean  --colorList "#306FBA,#FCEC92,#E93323"   --missingDataColor "blue"  --alpha 1.0  --colorNumber 256  --heatmapHeight 20  --heatmapWidth 10  --whatToShow "plot, heatmap and colorbar"  --boxAroundHeatmaps "yes"  --refPointLabel "$body_start"  --labelRotation 0  --regionsLabel "$geneCount" --yAxisLabel "Mean signal (RPKM)"  --legendLocation "best"  --zMax auto --xAxisLabel ""
 fi
 
 #making TSS and Gene heatmaps or just one?
@@ -124,9 +125,9 @@ if [ "$region" = "region" ] || [ "$region" = "both" ];
 then
 echo ''
 echo "computeMatrix: $body as Reference Point"
-computeMatrix scale-regions --regionsFileName $refFile --outFileName ${outputFile}-$body.matrix.gz --scoreFileName $bigwigInput --beforeRegionStartLength 2000 --afterRegionStartLength 2000 --regionBodyLength 4000 --binSize 20 --sortUsingSamples $sortSample --missingDataAsZero --numberOfProcessors 1 --startLabel "Start" --endLabel "End" --unscaled5prime 0 --unscaled3prime 0 --samplesLabel $labels
+computeMatrix scale-regions --regionsFileName $refFile --outFileName $shortRefFile/${outputFile}-$body.matrix.gz --scoreFileName $bigwigInput --beforeRegionStartLength 2000 --afterRegionStartLength 2000 --regionBodyLength 4000 --binSize 20 --sortUsingSamples $sortSample --missingDataAsZero --numberOfProcessors 1 --startLabel "Start" --endLabel "End" --unscaled5prime 0 --unscaled3prime 0 --samplesLabel $labels
 
 echo "plotHeatmap: $body as Reference Point"
-plotHeatmap --matrixFile ${outputFile}-$body.matrix.gz --outFileName ${outputFile}.$body.sortSample${sortSample}.heatmap.png --interpolationMethod auto  --dpi 150  --sortUsingSamples $sortSample  --averageTypeSummaryPlot mean  --missingDataColor "blue"  --colorList "#306FBA,#FCEC92,#E93323"  --alpha 1.0  --colorNumber 256  --heatmapHeight 20  --heatmapWidth 10  --whatToShow "plot, heatmap and colorbar"  --boxAroundHeatmaps "yes"  --startLabel "${body_start}"  --endLabel "${body_end}"  --labelRotation 0  --regionsLabel "$geneCount"  --yAxisLabel "Mean signal (RPKM)"  --legendLocation "best" --zMax auto --xAxisLabel ""
+plotHeatmap --matrixFile $shortRefFile/${outputFile}-$body.matrix.gz --outFileName $shortRefFile/${outputFile}.$body.sortSample${sortSample}.heatmap.png --interpolationMethod auto  --dpi 150  --sortUsingSamples $sortSample  --averageTypeSummaryPlot mean  --missingDataColor "blue"  --colorList "#306FBA,#FCEC92,#E93323"  --alpha 1.0  --colorNumber 256  --heatmapHeight 20  --heatmapWidth 10  --whatToShow "plot, heatmap and colorbar"  --boxAroundHeatmaps "yes"  --startLabel "${body_start}"  --endLabel "${body_end}"  --labelRotation 0  --regionsLabel "$geneCount"  --yAxisLabel "Mean signal (RPKM)"  --legendLocation "best" --zMax auto --xAxisLabel ""
 
 fi

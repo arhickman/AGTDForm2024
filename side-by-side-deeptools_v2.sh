@@ -17,7 +17,7 @@ Help()
    echo "Bash script that generates side-by-side deepTOOLS heatmaps of samples described in input file. Recommend 6 samples max."
    echo "Run in 4_deepTOOLS/b20chase directory"
    echo
-   echo "Syntax: sh side-by-side-deeptools_v2.sh [-h|i|r|g|c|s]"
+   echo "Syntax: sh side-by-side-deeptools_v2.sh [-h|i|r|c|s]"
    echo "options:"
    echo "-h      Print this Help."
    echo "-i      Name of input file." 

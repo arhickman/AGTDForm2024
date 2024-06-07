@@ -21,7 +21,7 @@ Help()
    echo "options:"
    echo "-h      Print this Help."
    echo "-i      Name of tab-delimited input file." 
-   echo "           First column should designate the sample names you'd like to include. "
+   echo "           First column should designate the bigwigs you'd like to include. "
    echo "           Order of samples in heatmap is determined by order of samples in input file."
    echo "           File is required."
    echo "-r      Region of heatmaps. Options are: 'start_site', 'region', or 'both'. Required."

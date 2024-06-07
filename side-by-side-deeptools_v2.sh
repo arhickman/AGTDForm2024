@@ -87,7 +87,7 @@ done
 #point to reference file
 genome="hg38"
 geneCount="23,235 genes"
-refFile='../hg38_PCgenes_TSS-TTS.bed'
+refFile='hg38_PCgenes_TSS-TTS.bed'
 
 start="${genome}-TSS"
 body="${genome}-GENE"

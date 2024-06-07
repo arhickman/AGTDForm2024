@@ -17,7 +17,7 @@ Help()
    echo "Bash script that generates side-by-side deepTOOLS heatmaps of samples described in input file. Recommend 6 samples max."
    echo "Run in 4_deepTOOLS/b20chase directory"
    echo
-   echo "Syntax: sh side-by-side-deeptools_v2.sh [-h|i|r|c|s]"
+   echo "Syntax: sh side-by-side-deeptools_v2.sh [-h|i|r|b|s]"
    echo "options:"
    echo "-h      Print this Help."
    echo "-i      Name of input file." 
@@ -25,7 +25,7 @@ Help()
    echo "           Order of samples in heatmap is determined by order of samples in input file."
    echo "           File is required."
    echo "-r      Region of heatmaps. Options are: 'start_site', 'region', or 'both'. Required."
-   echo "-c      Custom input peak input file. Overrides using hg38 reference file."
+   echo "-b      Tab-delimited bed file containing regions in which to compare bigwigs. Three columns: chrom, start, stop. No header. Required"
    echo "-s      The input file's line number of the sample you'd like to sort the heatmap rows by. Required."
    echo "           Example: First sample would be -s 1."
    echo
@@ -41,7 +41,7 @@ Help()
 # Process the input options. Add options as needed.        #
 ############################################################
 # Get the options
-while getopts ":hi:r:g:c:s:" option; do
+while getopts ":hi:r:b:s:" option; do
    case $option in
       h) # display Help
          Help
@@ -50,7 +50,7 @@ while getopts ":hi:r:g:c:s:" option; do
          inputFile=$OPTARG;;
       r) #enter region
          region=$OPTARG;;
-      c) #if not using genome reference files, specify custom input file
+      b) #if not using genome reference files, specify custom input file
          custom_input=$OPTARG;;
       s) #set sample# to sort by
          sortSample=$OPTARG;;
@@ -84,28 +84,15 @@ do
 
 done
 
-#point to reference file
-genome="hg38"
-geneCount="23,235 genes"
-refFile='hg38_PCgenes_TSS-TTS.bed'
-shortRefFile='hg38_PCgenes_TSS-TTS'
-start="${genome}-TSS"
-body="${genome}-GENE"
-body_start="TSS"
-body_end="TTS" 
-
-#new verbage if using custom input file
-if [ "$custom_input" != "" ]
-then
-    refFile="$custom_input"
-    shortRefFile="${custom_input%.bed}"
-    lines=$(wc -l $custom_input | cut -f1 -d' ')
-    geneCount="$lines regions"
-    start="RegionStartSite"
-    body="${custom_input%.bed}-Region"
-    body_start="Region Start"
-    body_end="Region End"
-fi
+#variables for custom bed file
+refFile="$custom_input"
+shortRefFile="${custom_input%.bed}"
+lines=$(wc -l $custom_input | cut -f1 -d' ')
+geneCount="$lines regions"
+start="RegionStartSite"
+body="${custom_input%.bed}-Region"
+body_start="Region Start"
+body_end="Region End"
 
 mkdir $shortRefFile
 #making TSS and Gene heatmaps or just one?

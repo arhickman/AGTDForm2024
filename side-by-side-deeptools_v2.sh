@@ -2,7 +2,7 @@
 
 #Alli Hickman
 #ahickman@epicypher.com
-#Last Updated: 3/19/2024
+#Last Updated: 6/7/2024
 
 #version notes
 #v2 update: added functionality to allow for input of custom bed files

@@ -96,7 +96,7 @@ echo ''
 echo 'computeMatrix: Region as Reference Point'
 computeMatrix scale-regions --regionsFileName $refFile --outFileName $shortRefFile/${outputFile}.Region.profile.matrix.gz --scoreFileName $bigwigInput --beforeRegionStartLength 2000 --afterRegionStartLength 2000 --regionBodyLength 4000 --binSize 20 --sortUsing mean --missingDataAsZero --numberOfProcessors 1 --startLabel "Start" --endLabel "End" --unscaled5prime 0 --unscaled3prime 0 --samplesLabel $labels
 
-echo 'plotHeatmap: Region as Reference Point'
+echo 'plotProfile: Region as Reference Point'
 plotProfile --matrixFile $shortRefFile/${outputFile}.Region.profile.matrix.gz  --outFileName $shortRefFile/${outputFile}.Region.profile.png --perGroup --regionsLabel "$bed"
 
 fi

@@ -72,10 +72,10 @@ do
 
 done
 
-shortRefFile="${custom_input%.bed}"
+shortRefFile="${bed%.bed}"
 mkdir $shortRefFile
 refFile="$bed"
-lines=$(wc -l $custom_input | cut -f1 -d' ')
+lines=$(wc -l $bed | cut -f1 -d' ')
 
 #making TSS and Gene heatmaps or just one?
 if [ "$region" = "start_site" ] || [ "$region" = "both" ];

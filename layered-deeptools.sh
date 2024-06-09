@@ -9,7 +9,7 @@ Help()
    echo "Bash script that generates side-by-side deepTOOLS heatmaps of samples described in input file. Recommend 6 samples max."
    echo "Run in directory with peak files and unsmoothed bigwigs"
    echo
-   echo "Syntax: sh side-by-side-deeptools.sh [-h|i|r|g|s]"
+   echo "Syntax: sh layered-deeptools.sh [-h|i|r|b]"
    echo "options:"
    echo "-h      Print this Help."
    echo "-i      Name of input file." 

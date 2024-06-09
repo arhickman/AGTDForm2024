@@ -72,7 +72,8 @@ do
 
 done
 
-
+shortRefFile="${custom_input%.bed}"
+mkdir $shortRefFile
 refFile="$bed"
 lines=$(wc -l $custom_input | cut -f1 -d' ')
 
@@ -82,10 +83,10 @@ then
 ## TSS +/2kb, bin 20bp, sort by row mean ###
 echo ''
 echo 'computeMatrix: Start Site as Reference Point'
-computeMatrix  reference-point  --regionsFileName $refFile  --scoreFileName $bigwigInput --outFileName ${outputFile}-startSite.matrix.gz --referencePoint TSS  --beforeRegionStartLength 2000  --afterRegionStartLength 2000  --binSize 20  --sortUsing mean --averageTypeBins mean  --missingDataAsZero  --scale 1  --numberOfProcessors 1 --samplesLabel $labels 
+computeMatrix  reference-point  --regionsFileName $refFile  --scoreFileName $bigwigInput --outFileName $shortRefFile/${outputFile}.startSite.profile.matrix.gz --referencePoint TSS  --beforeRegionStartLength 2000  --afterRegionStartLength 2000  --binSize 20  --sortUsing mean --averageTypeBins mean  --missingDataAsZero  --scale 1  --numberOfProcessors 1 --samplesLabel $labels 
 
-echo 'plotProfile: Start SIte as Reference Point'
-plotProfile --matrixFile ${outputFile}-startSite.matrix.gz  --outFileName ${outputFile}.startSite.layered.profile.png --perGroup --regionsLabel "$bed"
+echo 'plotProfile: Start Site as Reference Point'
+plotProfile --matrixFile $shortRefFile/${outputFile}.startSite.profile.matrix.gz  --outFileName $shortRefFile/${outputFile}.startSite.profile.png --perGroup --regionsLabel "$bed"
 fi
 
 #making TSS and Gene heatmaps or just one?
@@ -93,9 +94,9 @@ if [ "$region" = "region" ] || [ "$region" = "both" ];
 then
 echo ''
 echo 'computeMatrix: Region as Reference Point'
-computeMatrix scale-regions --regionsFileName $refFile --outFileName ${outputFile}-Region.matrix.gz --scoreFileName $bigwigInput --beforeRegionStartLength 2000 --afterRegionStartLength 2000 --regionBodyLength 4000 --binSize 20 --sortUsing mean --missingDataAsZero --numberOfProcessors 1 --startLabel "Start" --endLabel "End" --unscaled5prime 0 --unscaled3prime 0 --samplesLabel $labels
+computeMatrix scale-regions --regionsFileName $refFile --outFileName $shortRefFile/${outputFile}.Region.profile.matrix.gz --scoreFileName $bigwigInput --beforeRegionStartLength 2000 --afterRegionStartLength 2000 --regionBodyLength 4000 --binSize 20 --sortUsing mean --missingDataAsZero --numberOfProcessors 1 --startLabel "Start" --endLabel "End" --unscaled5prime 0 --unscaled3prime 0 --samplesLabel $labels
 
 echo 'plotHeatmap: Region as Reference Point'
-plotProfile --matrixFile ${outputFile}-Region.matrix.gz  --outFileName ${outputFile}.Region.layered.profile.png --perGroup --regionsLabel "$bed"
+plotProfile --matrixFile $shortRefFile/${outputFile}.Region.profile.matrix.gz  --outFileName $shortRefFile/${outputFile}.Region.profile.png --perGroup --regionsLabel "$bed"
 
 fi

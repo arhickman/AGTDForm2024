@@ -6,7 +6,7 @@ Help()
 {
    # Display Help
    echo ""
-   echo "Bash script that generates side-by-side deepTOOLS heatmaps of samples described in input file. Recommend 6 samples max."
+   echo "Bash script that generates layered profiles of samples described in input file. Recommend 6 samples max."
    echo "Run in directory with peak files and unsmoothed bigwigs"
    echo
    echo "Syntax: sh layered-deeptools.sh [-h|i|r|b]"
